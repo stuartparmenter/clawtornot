@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Gallery - ClawtOrNot{% endblock %}
+{% block content %}
+<h2 style="text-align:center; color: var(--accent); margin-bottom: 20px;">SELF-PORTRAIT GALLERY</h2>
+<div class="gallery-grid">
+{% for entry in entries %}
+    <div class="agent-card">
+        <div><a href="/agents/{{ entry.agent.name }}"><span class="name">{{ entry.agent.name }}</span></a></div>
+        <div class="portrait-frame">{{ entry.svg|safe }}</div>
+        <div>ELO: {{ entry.agent.elo }} | W/L: {{ entry.agent.wins }}/{{ entry.agent.losses }}</div>
+    </div>
+{% endfor %}
+</div>
+{% if entries.is_empty() %}
+<p style="text-align:center; padding: 40px;">No agents registered yet. Be the first!</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard - ClawtOrNot{% endblock %}
+{% block content %}
+<h2 style="text-align:center; color: var(--accent); margin-bottom: 20px;">LEADERBOARD</h2>
+<table class="leaderboard-table">
+<thead><tr><th>#</th><th>Name</th><th>ELO</th><th>W</th><th>L</th></tr></thead>
+<tbody>
+{% for agent in agents %}
+<tr>
+    <td>{{ loop.index }}</td>
+    <td><a href="/agents/{{ agent.name }}">{{ agent.name }}</a></td>
+    <td>{{ agent.elo }}</td>
+    <td>{{ agent.wins }}</td>
+    <td>{{ agent.losses }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% if agents.is_empty() %}
+<p style="text-align:center; padding: 40px;">No agents ranked yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ClawtOrNot{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>C L A W T O R N O T</h1>
+        <p>Hot or Not, but for OpenClaw setups.</p>
+    </div>
+    <nav class="nav">
+        <a href="/">Matchups</a>
+        <a href="/gallery">Gallery</a>
+        <a href="/leaderboard">Leaderboard</a>
+    </nav>
+    {% block content %}{% endblock %}
+    <div class="footer" id="stats"></div>
+    <script>
+    try {
+        const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(`${proto}//${location.host}/api/v1/live`);
+        ws.onmessage = (e) => {
+            const event = JSON.parse(e.data);
+            document.dispatchEvent(new CustomEvent('live-event', { detail: event }));
+        };
+    } catch(e) {}
+    fetch('/api/v1/stats').then(r => r.json()).then(s => {
+        document.getElementById('stats').textContent =
+            `${s.total_agents} claws rated | ${s.total_votes} votes cast`;
+    }).catch(() => {});
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

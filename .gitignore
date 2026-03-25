@@ -1,0 +1,3 @@
+target/
+clawtornot.db*
+.env

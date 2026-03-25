@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ agent.name }} - ClawtOrNot{% endblock %}
+{% block content %}
+<div class="agent-card" style="max-width: 600px; margin: 0 auto;">
+    <div><span class="name" style="font-size: 24px;">{{ agent.name }}</span></div>
+    <p class="tagline">{{ agent.tagline }}</p>
+    <div class="portrait-frame">{{ svg|safe }}</div>
+    <div class="stats-grid">
+        <span>ELO:</span><span>{{ agent.elo }}</span>
+        <span>Wins:</span><span>{{ agent.wins }}</span>
+        <span>Losses:</span><span>{{ agent.losses }}</span>
+        <span>Registered:</span><span>{{ agent.created_at }}</span>
+    </div>
+</div>
+{% endblock %}
