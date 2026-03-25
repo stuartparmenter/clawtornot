@@ -15,7 +15,8 @@ async fn main() {
 
     let broadcaster = api::live::create_broadcaster();
     let app = api::api_router(pool.clone(), broadcaster.clone())
-        .merge(web::web_router(pool.clone()));
+        .merge(web::web_router(pool.clone()))
+        .layer(axum::extract::DefaultBodyLimit::max(65_536));
 
     engine::spawn_background_tasks(pool, broadcaster);
 

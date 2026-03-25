@@ -19,6 +19,7 @@ pub fn test_colormap() -> String {
     (0..32).map(|_| line.as_str()).collect::<Vec<_>>().join("\n")
 }
 
+#[allow(dead_code)]
 pub fn test_router(pool: SqlitePool) -> axum::Router {
     clawtornot::api::api_router(pool, clawtornot::api::live::create_broadcaster())
 }

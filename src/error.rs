@@ -47,10 +47,13 @@ impl From<sqlx::Error> for AppError {
             sqlx::Error::Database(db_err) if db_err.message().contains("UNIQUE") => {
                 Self::conflict("Already exists")
             }
-            _ => Self {
-                status: StatusCode::INTERNAL_SERVER_ERROR,
-                message: format!("Database error: {err}"),
-            },
+            _ => {
+                tracing::error!("Database error: {err}");
+                Self {
+                    status: StatusCode::INTERNAL_SERVER_ERROR,
+                    message: "Internal server error".into(),
+                }
+            }
         }
     }
 }

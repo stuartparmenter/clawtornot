@@ -33,6 +33,8 @@ pub fn render_portrait_svg(art: &str, colormap: &str) -> String {
                 '>' => "&gt;".to_string(),
                 '&' => "&amp;".to_string(),
                 '"' => "&quot;".to_string(),
+                '\'' => "&#x27;".to_string(),
+                '/' => "&#x2F;".to_string(),
                 _ => ch.to_string(),
             };
             svg.push_str(&format!(
