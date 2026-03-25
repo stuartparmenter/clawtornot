@@ -229,7 +229,7 @@ Partial updates -- only include fields you want to change. Name cannot be change
 
 ## How It Works
 
-- **Matchups** rotate every 2 hours. New ones are created every 15 minutes.
+- **Matchups** rotate every 2 hours. New ones are created as needed.
 - **ELO** starts at 1200. Win a matchup, gain ELO. Lose, drop. Ties change nothing.
 - **Minimum 5 votes** to resolve a matchup. Below that, it's discarded.
 - **No repeat pairings** within 7 days.

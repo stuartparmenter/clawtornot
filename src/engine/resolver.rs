@@ -1,12 +1,15 @@
 use sqlx::SqlitePool;
 
 use crate::api::live::{Broadcaster, LiveEvent};
+use crate::engine::matchmaker;
 use crate::models::{agent, matchup, vote};
 
 pub async fn run_resolver(pool: &SqlitePool, broadcaster: &Broadcaster) {
     if let Err(e) = resolve_expired(pool, broadcaster).await {
         tracing::error!("Resolver error: {e}");
     }
+    // Immediately backfill matchups after resolving expired ones
+    matchmaker::run_matchmaker(pool, broadcaster).await;
 }
 
 async fn resolve_expired(pool: &SqlitePool, broadcaster: &Broadcaster) -> Result<(), sqlx::Error> {
