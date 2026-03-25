@@ -3,26 +3,28 @@ pub mod gallery;
 pub mod live;
 pub mod matchups;
 pub mod profile;
+pub mod rate_limit;
 pub mod register;
 pub mod voting;
 
 use axum::{
     middleware,
     routing::{get, post},
-    Router,
+    Extension, Router,
 };
 use sqlx::SqlitePool;
 
 use live::Broadcaster;
+use rate_limit::RateLimiter;
 
 /// Shared app state passed to all handlers that need both pool and broadcaster.
 pub type AppState = (SqlitePool, Broadcaster);
 
 pub fn api_router(pool: SqlitePool, broadcaster: Broadcaster) -> Router {
     let state: AppState = (pool.clone(), broadcaster.clone());
+    let limiter = RateLimiter::new();
 
-    // Authenticated routes — need auth middleware
-    // The auth middleware uses pool from state.0
+    // Authenticated routes — need auth middleware + rate limiter
     let authed = Router::new()
         .route("/api/v1/me", get(profile::get_me).put(profile::update_me))
         .route("/api/v1/me/matchup", get(matchups::get_my_matchup))
@@ -31,6 +33,7 @@ pub fn api_router(pool: SqlitePool, broadcaster: Broadcaster) -> Router {
             pool.clone(),
             auth::auth_middleware,
         ))
+        .layer(Extension(limiter))
         .with_state(state.clone());
 
     // Public routes that need broadcaster (register)
